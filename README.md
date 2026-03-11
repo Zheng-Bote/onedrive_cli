@@ -15,6 +15,25 @@ Report Issue](https://github.com/Zheng-Bote/onedrive_cliy/issues) · [Request Fe
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Description](#description)
+- [✨ Features](#-features)
+- [📦 Requirements](#-requirements)
+- [🔧 Build](#-build)
+- [🔐 Azure App Registration](#-azure-app-registration)
+  - [Required settings](#required-settings)
+  - [Environment variable](#environment-variable)
+- [🔑 Authentication](#-authentication)
+- [📤 Upload Files](#-upload-files)
+- [📥 Download Files](#-download-files)
+- [🧠 Architecture Overview](#-architecture-overview)
+- [🧪 Status](#-status)
+- [📜 License](#-license)
+- [🤝 Contributing](#-contributing)
+- [🚀 Roadmap](#-roadmap)
+- [Authors](#authors)
+  - [Code Contributors](#code-contributors)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
