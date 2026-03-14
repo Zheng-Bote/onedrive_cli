@@ -9,12 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 **Table of Contents**
 
-- [Changelog](#changelog)
-  - [\[1.0.0\] - 2026-03-14](#100---2026-03-14)
-    - [Added](#added)
+- [[1.0.0] - 2026-03-14](#100---2026-03-14)
+  - [Added](#added)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
