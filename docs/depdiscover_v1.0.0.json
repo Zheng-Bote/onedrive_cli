@@ -1,0 +1,103 @@
+{
+  "dependencies": [
+    {
+      "cves": [
+        {
+          "fixed_version": "",
+          "id": "NOT-CHECKED",
+          "severity": "UNKNOWN",
+          "summary": "Version unknown or latest, cannot query OSV",
+          "suppressed": false,
+          "suppression_reason": ""
+        }
+      ],
+      "headers": [
+        "/home/zb_bamboo/DEV/__NEW__/CPP/cpp_one-drive/onedrive/build/_deps/nlohmann_json-src/include/nlohmann/json.hpp",
+        "/home/zb_bamboo/DEV/__NEW__/CPP/cpp_one-drive/onedrive/include/onedrive/auth_client.hpp",
+        "/home/zb_bamboo/DEV/__NEW__/CPP/cpp_one-drive/onedrive/include/onedrive/drive_client.hpp",
+        "/home/zb_bamboo/DEV/__NEW__/CPP/cpp_one-drive/onedrive/include/onedrive/http_client.hpp",
+        "/home/zb_bamboo/DEV/__NEW__/CPP/cpp_one-drive/onedrive/include/onedrive/token_store.hpp",
+        "/home/zb_bamboo/DEV/__NEW__/CPP/cpp_one-drive/onedrive/include/onedrive/util.hpp"
+      ],
+      "libraries": [],
+      "licenses": [
+        "UNKNOWN"
+      ],
+      "name": "onedrive_lib",
+      "source": "cmake_target",
+      "type": "cmake_target",
+      "version": "unknown"
+    },
+    {
+      "cves": [],
+      "headers": [],
+      "libraries": [
+        "libc.so.6"
+      ],
+      "licenses": [
+        "UNKNOWN"
+      ],
+      "name": "libc.so.6",
+      "source": "elf_scan",
+      "type": "system",
+      "version": ""
+    },
+    {
+      "cves": [],
+      "headers": [],
+      "libraries": [
+        "libcurl.so.4"
+      ],
+      "licenses": [
+        "UNKNOWN"
+      ],
+      "name": "libcurl.so.4",
+      "source": "elf_scan",
+      "type": "system",
+      "version": ""
+    },
+    {
+      "cves": [],
+      "headers": [],
+      "libraries": [
+        "libgcc_s.so.1"
+      ],
+      "licenses": [
+        "UNKNOWN"
+      ],
+      "name": "libgcc_s.so.1",
+      "source": "elf_scan",
+      "type": "system",
+      "version": ""
+    },
+    {
+      "cves": [],
+      "headers": [],
+      "libraries": [
+        "libstdc++.so.6"
+      ],
+      "licenses": [
+        "UNKNOWN"
+      ],
+      "name": "libstdc++.so.6",
+      "source": "elf_scan",
+      "type": "system",
+      "version": ""
+    }
+  ],
+  "header": {
+    "project": {
+      "name": "onedrive_cli",
+      "workspace_root": "/home/zb_bamboo/DEV/__NEW__/CPP/cpp_one-drive/onedrive"
+    },
+    "scan_date": "2026-03-14",
+    "schema_version": "1.2",
+    "tool": {
+      "author": "ZHENG Bote",
+      "description": "Native C++ Dependency Scanner & SBOM Generator",
+      "homepage": "https://github.com/zb-bamboo/Dependency_Tracker_2",
+      "name": "depdiscover",
+      "version": "1.2.0"
+    }
+  }
+}

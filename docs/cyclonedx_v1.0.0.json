@@ -1,0 +1,92 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:generic/onedrive_lib@unknown",
+      "licenses": [
+        {
+          "license": {
+            "name": "UNKNOWN"
+          }
+        }
+      ],
+      "name": "onedrive_lib",
+      "purl": "pkg:generic/onedrive_lib@unknown",
+      "type": "library",
+      "version": "unknown"
+    },
+    {
+      "bom-ref": "pkg:generic/libc.so.6@",
+      "licenses": [
+        {
+          "license": {
+            "name": "UNKNOWN"
+          }
+        }
+      ],
+      "name": "libc.so.6",
+      "purl": "pkg:generic/libc.so.6@",
+      "type": "library",
+      "version": ""
+    },
+    {
+      "bom-ref": "pkg:generic/libcurl.so.4@",
+      "licenses": [
+        {
+          "license": {
+            "name": "UNKNOWN"
+          }
+        }
+      ],
+      "name": "libcurl.so.4",
+      "purl": "pkg:generic/libcurl.so.4@",
+      "type": "library",
+      "version": ""
+    },
+    {
+      "bom-ref": "pkg:generic/libgcc_s.so.1@",
+      "licenses": [
+        {
+          "license": {
+            "name": "UNKNOWN"
+          }
+        }
+      ],
+      "name": "libgcc_s.so.1",
+      "purl": "pkg:generic/libgcc_s.so.1@",
+      "type": "library",
+      "version": ""
+    },
+    {
+      "bom-ref": "pkg:generic/libstdc++.so.6@",
+      "licenses": [
+        {
+          "license": {
+            "name": "UNKNOWN"
+          }
+        }
+      ],
+      "name": "libstdc++.so.6",
+      "purl": "pkg:generic/libstdc++.so.6@",
+      "type": "library",
+      "version": ""
+    }
+  ],
+  "metadata": {
+    "component": {
+      "name": "onedrive_cli",
+      "type": "application"
+    },
+    "timestamp": "2026-03-14T09:47:37Z",
+    "tools": [
+      {
+        "name": "depdiscover",
+        "vendor": "ZHENG Bote",
+        "version": "1.2.0"
+      }
+    ]
+  },
+  "serialNumber": "urn:uuid:97045d0b-2905-402f-8797-397a75370597",
+  "specVersion": "1.4",
+  "version": 1
+}

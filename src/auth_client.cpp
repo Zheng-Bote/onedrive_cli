@@ -7,8 +7,8 @@
  *
  * @file auth.cpp
  * @brief Source for Authentication logic
- * @version 0.1.0
- * @date 2026-03-11
+ * @version 0.1.3
+ * @date 2026-03-14
  *
  * @author ZHENG Robert (robert@hase-zheng.net)
  * @copyright Copyright (c) 2026 ZHENG Robert
@@ -16,8 +16,9 @@
  * @license MIT License
  */
 
-#include "onedrive/auth.hpp"
+#include "onedrive/auth_client.hpp"
 #include "onedrive/util.hpp"
+
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
@@ -74,8 +75,9 @@ std::int64_t OAuthClient::now_unix() {
   return duration_cast<seconds>(system_clock::now().time_since_epoch()).count();
 }
 
-OAuthClient::OAuthClient(std::string client_id, TokenStore store)
-    : client_id_(std::move(client_id)), store_(std::move(store)) {}
+OAuthClient::OAuthClient(HttpClient &http, std::string client_id,
+                         const TokenStore &store)
+    : http_(http), client_id_(std::move(client_id)), store_(store) {}
 
 std::string OAuthClient::access_token() {
   if (!loaded_) {

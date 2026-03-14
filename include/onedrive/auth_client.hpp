@@ -5,10 +5,10 @@
  * SPDX-FileCopyrightText: 2026 ZHENG Robert
  * SPDX-License-Identifier: MIT
  *
- * @file auth.hpp
+ * @file auth_client.hpp
  * @brief Header for Authentication logic
- * @version 0.1.0
- * @date 2026-03-11
+ * @version 0.1.3
+ * @date 2026-03-14
  *
  * @author ZHENG Robert (robert@hase-zheng.net)
  * @copyright Copyright (c) 2026 ZHENG Robert
@@ -17,25 +17,31 @@
  */
 
 #pragma once
+
 #include "onedrive/http_client.hpp"
 #include "onedrive/token_store.hpp"
+
 #include <chrono>
 #include <string>
 
 namespace onedrive {
 
 /**
- * @brief Class responsible for handling OAuth 2.0 Device Code Flow authentication.
+ * @brief Class responsible for handling OAuth 2.0 Device Code Flow
+ * authentication.
+ *
+ * Note: OAuthClient stores a reference to an existing HttpClient instance.
  */
 class OAuthClient {
 public:
   /**
    * @brief Constructs an OAuthClient.
    *
+   * @param http Reference to an HttpClient used for HTTP requests.
    * @param client_id The client ID for the application.
-   * @param store The token store to use for caching tokens.
+   * @param store Reference to a TokenStore used for caching tokens.
    */
-  OAuthClient(std::string client_id, TokenStore store);
+  OAuthClient(HttpClient &http, std::string client_id, const TokenStore &store);
 
   /**
    * @brief Initiates the interactive device flow authentication.
@@ -47,7 +53,7 @@ public:
    *
    * @return std::string The valid access token.
    */
-  std::string access_token();      // auto refresh if needed
+  std::string access_token(); // auto refresh if needed
 
 private:
   /**
@@ -72,9 +78,9 @@ private:
   static std::int64_t now_unix();
 
 private:
+  HttpClient &http_;
   std::string client_id_;
   TokenStore store_;
-  HttpClient http_;
   TokenSet tokens_{};
   bool loaded_ = false;
 };

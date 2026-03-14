@@ -3,7 +3,7 @@
 
 <p>A modern, cross-platform <b>OneDrive command-line client</b></p>
 
-Report Issue](https://github.com/Zheng-Bote/onedrive_cliy/issues) · [Request Feature](https://github.com/Zheng-Bote/onedrive_cli/pulls)
+Report Issue](https://github.com/Zheng-Bote/onedrive_cli/issues) · [Request Feature](https://github.com/Zheng-Bote/onedrive_cli/pulls)
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey.svg)
@@ -15,6 +15,7 @@ Report Issue](https://github.com/Zheng-Bote/onedrive_cliy/issues) · [Request Fe
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 **Table of Contents**
 
 - [Description](#description)
@@ -25,13 +26,13 @@ Report Issue](https://github.com/Zheng-Bote/onedrive_cliy/issues) · [Request Fe
   - [Required settings](#required-settings)
   - [Environment variable](#environment-variable)
 - [🔑 Authentication](#-authentication)
-- [📤 Upload Files](#-upload-files)
-- [📥 Download Files](#-download-files)
+- [📤 Upload single File](#-upload-single-file)
+- [📥 Download single File](#-download-single-file)
+- [📂 Upload Folder](#-upload-folder)
+- [📥 Download Folder](#-download-folder)
 - [🧠 Architecture Overview](#-architecture-overview)
-- [🧪 Status](#-status)
+  - [Implementation notes](#implementation-notes)
 - [📜 License](#-license)
-- [🤝 Contributing](#-contributing)
-- [🚀 Roadmap](#-roadmap)
 - [Authors](#authors)
   - [Code Contributors](#code-contributors)
 
@@ -51,17 +52,18 @@ This project is designed as a clean, modular foundation for both CLI and future 
 
 ## ✨ Features
 
-- 🔐 OAuth 2.0 **Device Code Flow** (no browser embedding, no secrets)
-- 🔄 Automatic **token refresh**
-- 📤 Upload files to OneDrive
+- 🔐 **OAuth 2.0 Device Code Flow** (no embedded browser, no client secrets)
+- 🔄 **Automatic token refresh**
+- 📤 **Upload files**
   - Small files via direct PUT
-  - Large files (>4 MB) via **Upload Sessions**
-- 📥 Download files from OneDrive
-- 📊 Upload progress with **percentage, speed, and ETA**
+  - Large files (> 4 MB) via **Upload Sessions** (chunked)
+- 📥 **Download files**
+- 📂 **Folder upload** and **folder download** (recursive)
+- 📊 **Progress display** with percentage, speed, and ETA
 - 🧱 Clean separation of concerns:
-  - `HttpClient` – HTTP transport
-  - `AuthClient` – OAuth handling
-  - `DriveClient` – OneDrive logic
+  - **HttpClient** – HTTP transport
+  - **AuthClient** – OAuth handling
+  - **DriveClient** – OneDrive logic
 - 🧩 Qt‑ready architecture (UI‑agnostic core)
 - 🛠 Modern CMake build system
 - 📦 Uses `nlohmann::json`
@@ -111,7 +113,7 @@ export ONEDRIVE_CLIENT_ID=<your-application-client-id>
 ## 🔑 Authentication
 
 ```bash
-./onedrive auth
+./onedrive_cli auth
 ```
 
 You will be prompted to open a URL and enter a device code.
@@ -119,13 +121,13 @@ You will be prompted to open a URL and enter a device code.
 Tokens are stored at:
 
 ```Code
-~/.config/onedrive-cli/token.json
+~/.config/onedrive_cli-cli/token.json
 ```
 
-## 📤 Upload Files
+## 📤 Upload single File
 
 ```bash
-./onedrive upload local_file.txt docs/remote_file.txt
+./onedrive_cli upload local_file.txt docs/remote_file.txt
 ```
 
 **_Example output_**
@@ -139,10 +141,22 @@ Uploaded.
 - Files ≤ 4 MB use direct upload
 - Files > 4 MB use Microsoft Graph Upload Sessions
 
-## 📥 Download Files
+## 📥 Download single File
 
 ```bash
-./onedrive download docs/remote_file.txt local_copy.txt
+./onedrive_cli download docs/remote_file.txt local_copy.txt
+```
+
+## 📂 Upload Folder
+
+```bash
+./onedrive_cli upload-folder <local_dir> <remote_dir> [--recursive] [--strip-root]
+```
+
+## 📥 Download Folder
+
+```bash
+./onedrive_cli download-folder <remote_dir> <local_dir> [--recursive] [--strip-root]
 ```
 
 ## 🧠 Architecture Overview
@@ -169,15 +183,19 @@ CMakeLists.txt
 - All progress reporting via callbacks
 - Designed for reuse in Qt or other frontends
 
-## 🧪 Status
+### Implementation notes
 
-- ✔ Authentication
-- ✔ Token refresh
-- ✔ Upload (small & large)
-- ✔ Download
-- ✔ Progress / Speed / ETA
-- ⏳ Resumable uploads (planned)
-- ⏳ Directory upload (planned)
+- TokenStore requires a file path at construction; the CLI uses ~/.config/onedrive-cli/token.json by default.
+- DriveClient constructor in this codebase uses the signature:
+
+```cpp
+DriveClient(HttpClient &http, OAuthClient &auth);
+```
+
+The CLI constructs an HttpClient, an OAuthClient, then passes both to DriveClient.
+
+- Listing API: DriveClient::list_folder(remote_path, recursive) returns entries with { path, size, is_dir }. The CLI maps those entries to local filesystem paths for downloads.
+- Error handling: Basic retry/backoff is implemented for rate limits (HTTP 429). Network and API errors surface as exceptions; you can extend retry strategies or add resume support as needed.
 
 ---
 
@@ -186,19 +204,6 @@ CMakeLists.txt
 MIT License
 
 © 2026 ZHENG Robert
-
-## 🤝 Contributing
-
-Contributions, suggestions, and reviews are welcome.
-Please keep changes clean, modular, and well-documented.
-
-## 🚀 Roadmap
-
-- Resumable upload sessions
-- Retry & backoff logic
-- Directory synchronization
-- Qt GUI frontend
-- Unit tests for HTTP and OAuth layers
 
 ## Authors
 

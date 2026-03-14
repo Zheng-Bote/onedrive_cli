@@ -1,96 +1,90 @@
 /**
- * SPDX-FileComment: OneDrive API Client Header
+ * SPDX-FileComment: OneDrive Drive Client Header
  * SPDX-FileType: SOURCE
  * SPDX-FileContributor: ZHENG Robert
  * SPDX-FileCopyrightText: 2026 ZHENG Robert
  * SPDX-License-Identifier: MIT
  *
  * @file drive_client.hpp
- * @brief Header for high-level OneDrive operations
- * @version 0.1.0
- * @date 2026-03-11
+ * @brief High-level OneDrive operations (upload/download/list)
+ * @version 0.1.3
+ * @date 2026-03-14
  *
- * @author ZHENG Robert (robert@hase-zheng.net)
- * @copyright Copyright (c) 2026 ZHENG Robert
- *
- * @license MIT License
  */
 
 #pragma once
-#include "onedrive/auth.hpp"
+
+#include "onedrive/auth_client.hpp"
 #include "onedrive/http_client.hpp"
 
+#include <cstdint>
 #include <filesystem>
 #include <functional>
-#include <string_view>
+#include <string>
+#include <vector>
 
 namespace onedrive {
 
 /**
- * @brief Class representing the OneDrive logic and operations.
+ * @brief High level OneDrive client that implements upload/download and
+ * listing.
+ *
+ * DriveClient holds references to an HttpClient and an OAuthClient.
  */
 class DriveClient {
 public:
-  /**
-   * @brief Constructs a DriveClient.
-   *
-   * @param auth The OAuthClient to use for authentication.
-   */
-  explicit DriveClient(OAuthClient &auth);
+  using ProgressFn =
+      std::function<void(std::uint64_t /*sent*/, std::uint64_t /*total*/)>;
+
+  struct RemoteEntry {
+    std::string path;   /**< remote path, e.g. "docs/include/foo.txt" */
+    std::uint64_t size; /**< size in bytes (0 for folders) */
+    bool is_dir{false}; /**< true if entry is a folder */
+  };
 
   /**
-   * @brief Uploads a file to OneDrive. Uses sessions for large files.
+   * @brief Construct a DriveClient.
    *
-   * @param local_file The local file to upload.
-   * @param remote_path The remote path on OneDrive.
-   * @param progress Optional progress callback.
+   * @param http Reference to an HttpClient instance (must outlive this object).
+   * @param auth Reference to an OAuthClient instance (must outlive this
+   * object).
+   */
+  DriveClient(HttpClient &http, OAuthClient &auth);
+
+  /**
+   * @brief Upload a local file to a remote path. Chooses small or large upload.
    */
   void upload(const std::filesystem::path &local_file,
-              std::string_view remote_path, ProgressFn progress = {});
+              std::string_view remote_path, ProgressFn progress = nullptr);
 
   /**
-   * @brief Downloads a file from OneDrive.
-   *
-   * @param remote_path The remote path on OneDrive.
-   * @param local_file The local file to save as.
+   * @brief Upload a large file using an upload session and chunked PUTs.
+   */
+  void upload_large(const std::filesystem::path &local, std::string_view remote,
+                    std::size_t chunk_size, ProgressFn progress = nullptr);
+
+  /**
+   * @brief Download a remote file to a local path.
    */
   void download(std::string_view remote_path,
                 const std::filesystem::path &local_file);
 
   /**
-   * @brief Uploads a large file in chunks using an upload session.
-   *
-   * @param local_file The local file to upload.
-   * @param remote_path The remote path on OneDrive.
-   * @param chunk_size The chunk size in bytes (default 10MB).
-   * @param progress Optional progress callback.
+   * @brief List entries under a remote folder.
    */
-  void upload_large(const std::filesystem::path &local_file,
-                    std::string_view remote_path,
-                    std::size_t chunk_size = 10 * 1024 * 1024,
-                    ProgressFn progress = {});
+  std::vector<RemoteEntry> list_folder(std::string_view remote_path,
+                                       bool recursive);
 
 private:
-  /**
-   * @brief Generates the upload/download API URL for a specific remote path.
-   *
-   * @param remote_path The remote path in OneDrive.
-   * @return std::string The API URL.
-   */
   std::string make_content_url(std::string_view remote_path) const;
 
-  /**
-   * @brief Executes an HTTP request with automatic token refresh on 401 error.
-   *
-   * @param fn The request function taking a bearer token.
-   * @return HttpResponse The result of the HTTP request.
-   */
+  // Helper to call an HTTP lambda with current bearer token and refresh on 401.
   HttpResponse request_with_refresh_on_401(
-      std::function<HttpResponse(const std::string &bearer)> fn);
+      const std::function<HttpResponse(const std::string &)> &fn);
 
 private:
+  HttpClient &http_;
   OAuthClient &auth_;
-  HttpClient http_;
 };
 
 } // namespace onedrive
